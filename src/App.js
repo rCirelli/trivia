@@ -6,7 +6,6 @@ import Feedback from './pages/Feedback';
 import Ranking from './pages/Ranking';
 import Config from './pages/Config';
 // import logo from './trivia.png';
-// import './App.css';
 
 export default function App() {
   return (
