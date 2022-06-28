@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Input from '../components/Input';
-import { fetchToken } from '../redux/actions';
+import { fetchToken, dataUser } from '../redux/actions';
 
 class Login extends Component {
   state = {
@@ -31,7 +31,10 @@ class Login extends Component {
 
   submit = () => {
     const { history, dispatch } = this.props;
+    const newState = { ...this.state };
+    delete newState.isDisabled;
     dispatch(fetchToken()).then(() => {
+      dispatch(dataUser(newState));
       this.saveLocalStorage();
       history.push('/game');
     });
