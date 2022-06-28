@@ -40,6 +40,11 @@ class Login extends Component {
     });
   }
 
+  config = () => {
+    const { history } = this.props;
+    history.push('/config');
+  }
+
   render() {
     const { name, email, isDisabled } = this.state;
     return (
@@ -69,6 +74,13 @@ class Login extends Component {
           onClick={ this.submit }
         >
           Play
+        </button>
+        <button
+          data-testid="btn-settings"
+          type="button"
+          onClick={ this.config }
+        >
+          Configurações
         </button>
       </div>
     );
