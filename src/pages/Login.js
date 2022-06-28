@@ -26,7 +26,6 @@ class Login extends Component {
 
   saveLocalStorage = async () => {
     const response = await api();
-    localStorage.setItem('ranking', []);
     localStorage.setItem('token', response.token);
   }
 
