@@ -4,8 +4,8 @@ import Login from './pages/Login';
 import Game from './pages/Game';
 import Feedback from './pages/Feedback';
 import Ranking from './pages/Ranking';
+import './App.css';
 // import logo from './trivia.png';
-// import './App.css';
 
 export default function App() {
   return (
