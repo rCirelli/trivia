@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import Input from '../components/Input';
+import { fetchToken, dataUser } from '../redux/actions';
 
 class Login extends Component {
   state = {
@@ -18,6 +21,23 @@ class Login extends Component {
 
   handleChange = ({ target: { name, value } }) => {
     this.setState({ [name]: value }, this.valitadionButton());
+  }
+
+  saveLocalStorage = () => {
+    const { ranking } = this.props;
+    localStorage.setItem('ranking', ranking.ranking);
+    localStorage.setItem('token', ranking.token);
+  }
+
+  submit = () => {
+    const { history, dispatch } = this.props;
+    const newState = { ...this.state };
+    delete newState.isDisabled;
+    dispatch(fetchToken()).then(() => {
+      dispatch(dataUser(newState));
+      this.saveLocalStorage();
+      history.push('/game');
+    });
   }
 
   render() {
@@ -42,10 +62,27 @@ class Login extends Component {
           handleChange={ this.handleChange }
           dataTestid="input-gravatar-email"
         />
-        <button data-testid="btn-play" type="button" disabled={ isDisabled }>Play</button>
+        <button
+          data-testid="btn-play"
+          type="button"
+          disabled={ isDisabled }
+          onClick={ this.submit }
+        >
+          Play
+        </button>
       </div>
     );
   }
 }
 
-export default Login;
+Login.propTypes = {
+  history: PropTypes.objectOf(PropTypes.any).isRequired,
+  dispatch: PropTypes.func.isRequired,
+  ranking: PropTypes.objectOf(PropTypes.any).isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  ranking: state.ranking,
+});
+
+export default connect(mapStateToProps)(Login);
