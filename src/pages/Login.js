@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Input from '../components/Input';
-import { fetchToken, dataUser } from '../redux/actions';
+import { dataUser } from '../redux/actions';
+import api from '../service/api';
 
 class Login extends Component {
   state = {
@@ -23,21 +24,23 @@ class Login extends Component {
     this.setState({ [name]: value }, this.valitadionButton());
   }
 
-  saveLocalStorage = () => {
-    const { ranking } = this.props;
-    localStorage.setItem('ranking', ranking.ranking);
-    localStorage.setItem('token', ranking.token);
+  saveLocalStorage = async () => {
+    const response = await api();
+    localStorage.setItem('token', response.token);
   }
 
   submit = () => {
     const { history, dispatch } = this.props;
     const newState = { ...this.state };
     delete newState.isDisabled;
-    dispatch(fetchToken()).then(() => {
-      dispatch(dataUser(newState));
-      this.saveLocalStorage();
-      history.push('/game');
-    });
+    dispatch(dataUser(newState));
+    this.saveLocalStorage();
+    history.push('/game');
+  }
+
+  config = () => {
+    const { history } = this.props;
+    history.push('/config');
   }
 
   render() {
@@ -70,6 +73,13 @@ class Login extends Component {
         >
           Play
         </button>
+        <button
+          data-testid="btn-settings"
+          type="button"
+          onClick={ this.config }
+        >
+          Configurações
+        </button>
       </div>
     );
   }
@@ -78,11 +88,6 @@ class Login extends Component {
 Login.propTypes = {
   history: PropTypes.objectOf(PropTypes.any).isRequired,
   dispatch: PropTypes.func.isRequired,
-  ranking: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
-const mapStateToProps = (state) => ({
-  ranking: state.ranking,
-});
-
-export default connect(mapStateToProps)(Login);
+export default connect()(Login);

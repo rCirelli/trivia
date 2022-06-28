@@ -4,7 +4,7 @@ import Login from './pages/Login';
 import Game from './pages/Game';
 import Feedback from './pages/Feedback';
 import Ranking from './pages/Ranking';
-import './App.css';
+import Config from './pages/Config';
 // import logo from './trivia.png';
 
 export default function App() {
@@ -14,6 +14,7 @@ export default function App() {
       <Route exact path="/game" component={ Game } />
       <Route exact path="/feedback" component={ Feedback } />
       <Route exact path="/ranking" component={ Ranking } />
+      <Route exact path="/config" component={ Config } />
     </Switch>
   );
 }
