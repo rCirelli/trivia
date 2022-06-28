@@ -32,7 +32,7 @@ class Header extends Component {
         </div>
         <div>
           <span>Score:</span>
-          <span data-testid="header-score">{player.score}</span>
+          <span data-testid="header-score">{player.score === '' ? '0' : player.score}</span>
         </div>
       </header>
     );
