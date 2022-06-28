@@ -12,27 +12,29 @@ class Header extends Component {
     alignItems: 'center',
   };
 
-  hashEmail = (email) => {
-    return md5(email).toString();
-  }
+  hashEmail = (email) => md5(email).toString();
 
   render() {
     const { player } = this.props;
 
     return (
-      <header style={this.headerStyle}>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
+      <header style={ this.headerStyle }>
+        <div style={ { display: 'flex', alignItems: 'center' } }>
           <img
-            src={`https://www.gravatar.com/avatar/${this.hashEmail(player.email)}`}
-            width={70}
+            src={ `https://www.gravatar.com/avatar/${this.hashEmail(player.email)}` }
+            width={ 70 }
             alt="profile"
             data-testid="header-profile-picture"
           />
-          <span data-testid="header-player-name">{player.name}</span>
+          <span data-testid="header-player-name">{ player.name }</span>
         </div>
         <div>
           <span>Score:</span>
-          <span data-testid="header-score">{player.score === '' ? '0' : player.score}</span>
+          <span
+            data-testid="header-score"
+          >
+            { player.score === '' ? '0' : player.score }
+          </span>
         </div>
       </header>
     );
@@ -42,6 +44,7 @@ class Header extends Component {
 Header.propTypes = {
   player: PropTypes.shape({
     name: PropTypes.string.isRequired,
+    email: PropTypes.string.isRequired,
     assertions: PropTypes.string.isRequired,
     score: PropTypes.string.isRequired,
     gravatarEmail: PropTypes.string.isRequired,
