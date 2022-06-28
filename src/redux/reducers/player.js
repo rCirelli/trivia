@@ -1,8 +1,8 @@
 const INITIAL_STATE = {
-  name: 'Raphael Cirelli',
+  name: '',
   assertions: '',
   score: '',
-  gravatarEmail: 'raphaelc.garrido@gmail.com',
+  gravatarEmail: '',
 };
 
 export default function player(state = INITIAL_STATE) {
