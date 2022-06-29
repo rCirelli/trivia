@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Header from '../components/Header';
 
 class Feedback extends Component {
   render() {
     const { history } = this.props;
     return (
       <div>
+        <Header />
         <h1>Hello</h1>
 
         <button

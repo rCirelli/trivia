@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { scoreUp } from '../redux/actions';
 import Header from '../components/Header';
 import Timer from '../components/Timer';
 
@@ -11,6 +13,8 @@ class Game extends Component {
     count: 0,
     isResponded: false,
     isDisabledQuestion: false,
+    isPaused: false,
+    isNext: false,
   }
 
   correctAnswerStyle = {
@@ -75,25 +79,52 @@ class Game extends Component {
     return arr;
   }
 
-  responded = () => {
-    this.setState({ isResponded: true, isDisabledQuestion: true });
+  responded = ({ target: { id } }) => {
+    const delay = 500;
+    this.setState({ isResponded: true, isDisabledQuestion: true, isPaused: true });
+    setTimeout(() => this.scoreboard(id), delay);
+  }
+
+  scoreboard = (response) => {
+    const { count, questions } = this.state;
+    const { timerResponse, dispatch } = this.props;
+    const difficultyValue = {
+      easy: 1,
+      medium: 2,
+      hard: 3,
+    };
+    const { difficulty } = questions[count];
+    const constScore = 10;
+    if (response === questions[count].correct_answer) {
+      const score = constScore + (timerResponse * difficultyValue[difficulty]);
+      dispatch(scoreUp({ score }));
+    }
   }
 
   nextQuestion = () => {
     const { count } = this.state;
+    const { history } = this.props;
     const MAX_ARRAY = 4;
     if (count < MAX_ARRAY) {
       this.setState((prev) => ({
         isResponded: false,
         count: prev.count + 1,
         isDisabledQuestion: false,
+        isPaused: false,
+        isNext: true,
       }));
+    } else {
+      history.push('/feedback');
     }
+  }
+
+  resetNext = () => {
+    this.setState({ isNext: false });
   }
 
   timerOff = () => {
     this.setState({ isDisabledQuestion: true });
-    this.responded();
+    this.responded({ target: { value: 'erro' } });
   }
 
   applyStyle = (answerType) => {
@@ -111,14 +142,17 @@ class Game extends Component {
   }
 
   render() {
-    const { questions, count,
-      answers, isResponded,
+    const { questions, count, isPaused,
+      answers, isResponded, isNext,
       isDisabledQuestion, answerArrSort } = this.state;
     return (
       <div>
         <Header />
         <Timer
           timerOff={ this.timerOff }
+          isPaused={ isPaused }
+          isNext={ isNext }
+          resetNext={ this.resetNext }
         />
         {answers && (
           <>
@@ -144,10 +178,11 @@ class Game extends Component {
                   <button
                     style={ this.applyStyle(answer.answerType) }
                     type="button"
+                    id={ answer.answer }
                     key={ index }
                     data-testid={ answer.dataTesting }
                     disabled={ isDisabledQuestion }
-                    onClick={ this.responded }
+                    onClick={ (event) => this.responded(event) }
                   >
                     {answer.answer}
 
@@ -176,8 +211,14 @@ class Game extends Component {
   }
 }
 
-export default Game;
+const mapStateToProps = (state) => ({
+  timerResponse: state.player.timerResponse,
+});
+
+export default connect(mapStateToProps)(Game);
 
 Game.propTypes = {
   history: PropTypes.objectOf(PropTypes.any).isRequired,
+  timerResponse: PropTypes.number.isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
