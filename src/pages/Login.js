@@ -34,8 +34,8 @@ class Login extends Component {
     const newState = { ...this.state };
     delete newState.isDisabled;
     dispatch(dataUser(newState));
-    this.saveLocalStorage();
-    history.push('/game');
+    this.saveLocalStorage()
+      .then(() => history.push('/game'));
   }
 
   config = () => {

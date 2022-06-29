@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Header from '../components/Header';
 
 class Game extends Component {
@@ -8,34 +9,36 @@ class Game extends Component {
     count: 0,
   }
 
-  async componentDidMount() {
+  componentDidMount() {
+    const { history } = this.props;
     const RESPONDE_CODE_WRONG = 3;
     const tokenUser = localStorage.getItem('token');
-    fetch(`https://opentdb.com/api.php?amount=5&token=${tokenUser}`, {
-      method: 'GET',
-    }).then((response) => response.json()).then((data) => {
-      if (data.response_code === RESPONDE_CODE_WRONG) {
-        localStorage.clear();
-      } else {
-        this.setState({
-          questions: data.results,
-        });
-      }
-    }).then(() => {
-      const { questions, count } = this.state;
-      const answers = questions[count].incorrect_answers.map((answer, index) => (
-        {
-          answer,
-          dataTesting: `wrong-answer-${index}`,
+    console.log(tokenUser);
+    fetch(`https://opentdb.com/api.php?amount=5&token=${tokenUser}`)
+      .then((response) => response.json()).then((data) => {
+        if (data.response_code === RESPONDE_CODE_WRONG) {
+          localStorage.clear();
+          history.push('/');
+        } else {
+          this.setState({
+            questions: data.results,
+          });
         }
-      ));
+      }).then(() => {
+        const { questions, count } = this.state;
+        const answers = questions[count].incorrect_answers.map((answer, index) => (
+          {
+            answer,
+            dataTesting: `wrong-answer-${index}`,
+          }
+        ));
 
-      answers.push({
-        answer: questions[count].correct_answer,
-        dataTesting: 'correct-answer',
+        answers.push({
+          answer: questions[count].correct_answer,
+          dataTesting: 'correct-answer',
+        });
+        this.setState({ answers });
       });
-      this.setState({ answers });
-    });
   }
 
   // Função para randomizar array
@@ -66,23 +69,28 @@ class Game extends Component {
               {questions[count].category}
             </h3>
             <h3
-              data-testid
+              data-testid="question-text"
             >
               Pergunta:
               {' '}
               {questions[count].question}
             </h3>
-            {
-              this.shuffleArray(answers).map((answer, index) => (
-                <p
-                  key={ index }
-                  data-testid={ answer.dataTesting }
-                >
-                  {answer.answer}
+            <section
+              data-testid="answer-options"
+            >
+              {
+                this.shuffleArray(answers).map((answer, index) => (
+                  <button
+                    type="button"
+                    key={ index }
+                    data-testid={ answer.dataTesting }
+                  >
+                    {answer.answer}
 
-                </p>
-              ))
-            }
+                  </button>
+                ))
+              }
+            </section>
           </>
         )}
 
@@ -93,3 +101,7 @@ class Game extends Component {
 }
 
 export default Game;
+
+Game.propTypes = {
+  history: PropTypes.objectOf(PropTypes.any).isRequired,
+};
