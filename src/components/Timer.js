@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { timerResponse } from '../redux/actions';
 
 class Timer extends Component {
   state = {
@@ -14,12 +13,13 @@ class Timer extends Component {
   }
 
   componentDidUpdate() {
-    const { isPaused, dispatch, isNext, resetNext } = this.props;
+    const { isPaused, isNext, resetNext, setTimerStop } = this.props;
     const { timerId, counter } = this.state;
     if (!isPaused) {
       this.setTimer();
     } else {
-      dispatch(timerResponse({ timerResponse: counter }));
+      // dispatch(timerResponse({ timerResponse: counter }));
+      setTimerStop(counter);
       clearInterval(timerId);
     }
     if (isNext) {
@@ -64,7 +64,7 @@ class Timer extends Component {
 Timer.propTypes = {
   timerOff: PropTypes.func.isRequired,
   isPaused: PropTypes.bool.isRequired,
-  dispatch: PropTypes.bool.isRequired,
+  setTimerStop: PropTypes.bool.isRequired,
   isNext: PropTypes.bool.isRequired,
   resetNext: PropTypes.func.isRequired,
 };

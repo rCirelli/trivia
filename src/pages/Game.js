@@ -7,6 +7,7 @@ import Timer from '../components/Timer';
 
 class Game extends Component {
   state = {
+    timerStop: 0,
     answerArrSort: [],
     questions: '',
     answers: '',
@@ -80,14 +81,17 @@ class Game extends Component {
   }
 
   responded = ({ target: { id } }) => {
-    const delay = 500;
     this.setState({ isResponded: true, isDisabledQuestion: true, isPaused: true });
-    setTimeout(() => this.scoreboard(id), delay);
+    this.scoreboard(id);
+  }
+
+  setTimerStop = (time) => {
+    this.setState({ timerStop: time });
   }
 
   scoreboard = (response) => {
-    const { count, questions } = this.state;
-    const { timerResponse, dispatch } = this.props;
+    const { count, questions, timerStop } = this.state;
+    const { dispatch } = this.props;
     const difficultyValue = {
       easy: 1,
       medium: 2,
@@ -96,7 +100,7 @@ class Game extends Component {
     const { difficulty } = questions[count];
     const constScore = 10;
     if (response === questions[count].correct_answer) {
-      const score = constScore + (timerResponse * difficultyValue[difficulty]);
+      const score = constScore + (timerStop * difficultyValue[difficulty]);
       dispatch(scoreUp({ score }));
     }
   }
@@ -149,6 +153,7 @@ class Game extends Component {
       <div>
         <Header />
         <Timer
+          setTimerStop={ this.setTimerStop }
           timerOff={ this.timerOff }
           isPaused={ isPaused }
           isNext={ isNext }
@@ -219,6 +224,5 @@ export default connect(mapStateToProps)(Game);
 
 Game.propTypes = {
   history: PropTypes.objectOf(PropTypes.any).isRequired,
-  timerResponse: PropTypes.number.isRequired,
   dispatch: PropTypes.func.isRequired,
 };
