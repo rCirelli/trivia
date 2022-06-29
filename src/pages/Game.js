@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Header from '../components/Header';
 
 class Game extends Component {
   state = {
@@ -54,7 +55,7 @@ class Game extends Component {
     const { questions, count, answers } = this.state;
     return (
       <div>
-        <h1>Hello</h1>
+        <Header />
         {answers && (
           <>
             <h3
@@ -86,6 +87,7 @@ class Game extends Component {
         )}
 
       </div>
+
     );
   }
 }
