@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Header from '../components/Header';
+import Timer from '../components/Timer';
 
 class Game extends Component {
   state = {
+    answerArrSort: [],
     questions: '',
     answers: '',
     count: 0,
+    isResponded: false,
+    isDisabledQuestion: false,
   }
 
   componentDidMount() {
@@ -38,9 +42,12 @@ class Game extends Component {
           dataTesting: 'correct-answer',
         });
         this.setState({ answers });
+        const answerArrSort = this.shuffleArray(answers);
+        this.setState({ answerArrSort });
       });
   }
-
+  // referencia de codigo:
+  // https://www.horadecodar.com.br/2021/05/10/como-embaralhar-um-array-em-javascript-shuffle/
   // Função para randomizar array
   shuffleArray = (arr) => {
     // Loop em todos os elementos
@@ -54,11 +61,23 @@ class Game extends Component {
     return arr;
   }
 
+  responded = () => {
+    this.setState({ isResponded: true });
+  }
+
+  timerOff = () => {
+    this.setState({ isDisabledQuestion: true });
+    this.responded();
+  }
+
   render() {
-    const { questions, count, answers } = this.state;
+    const { questions, count, answers, isResponded, isDisabledQuestion, answerArrSort } = this.state;
     return (
       <div>
         <Header />
+        <Timer
+          timerOff={ this.timerOff }
+        />
         {answers && (
           <>
             <h3
@@ -79,11 +98,13 @@ class Game extends Component {
               data-testid="answer-options"
             >
               {
-                this.shuffleArray(answers).map((answer, index) => (
+                answerArrSort?.map((answer, index) => (
                   <button
                     type="button"
                     key={ index }
                     data-testid={ answer.dataTesting }
+                    disabled={ isDisabledQuestion }
+                    onClick={ this.responded }
                   >
                     {answer.answer}
 
@@ -91,6 +112,9 @@ class Game extends Component {
                 ))
               }
             </section>
+            {
+              isResponded && <button data-testid="btn-next">Next</button>
+            }
           </>
         )}
 
