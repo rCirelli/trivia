@@ -6,25 +6,25 @@ class Feedback extends Component {
     const { history } = this.props;
     return (
       <div>
-      <h1>Hello</h1>
-      
-      <button
-        //Requisito 16
-        type='button'
-        onClick={ () => history.push('/ranking')}
-        data-testid='btn-ranking'
-      >
-        Ranking
-      </button>
-      
-      <button
-      // Requisito 15
-        type='button'
-        onClick={ () => history.push('/')}
-        data-testid='btn-play-again'
-      >
-        Play Again
-      </button>
+        <h1>Hello</h1>
+
+        <button
+        // Requisito 16
+          type="button"
+          onClick={ () => history.push('/ranking') }
+          data-testid="btn-ranking"
+        >
+          Ranking
+        </button>
+
+        <button
+          // Requisito 15
+          type="button"
+          onClick={ () => history.push('/') }
+          data-testid="btn-play-again"
+        >
+          Play Again
+        </button>
       </div>
     );
   }

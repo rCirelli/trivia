@@ -13,11 +13,18 @@ class Game extends Component {
     isDisabledQuestion: false,
   }
 
+  correctAnswerStyle = {
+    border: '3px solid rgb(6, 240, 15)',
+  }
+
+  wrongAnswerStyle = {
+    border: '3px solid red',
+  }
+
   componentDidMount() {
     const { history } = this.props;
     const RESPONDE_CODE_WRONG = 3;
     const tokenUser = localStorage.getItem('token');
-    console.log(tokenUser);
     fetch(`https://opentdb.com/api.php?amount=5&token=${tokenUser}`)
       .then((response) => response.json()).then((data) => {
         if (data.response_code === RESPONDE_CODE_WRONG) {
@@ -29,23 +36,30 @@ class Game extends Component {
           });
         }
       }).then(() => {
-        const { questions, count } = this.state;
-        const answers = questions[count].incorrect_answers.map((answer, index) => (
-          {
-            answer,
-            dataTesting: `wrong-answer-${index}`,
-          }
-        ));
+        const { questions } = this.state;
+        // Criação do banco de dados das questões com seus respectivos valores
+        let answerArrSort = questions.map((question) => {
+          const answers = question.incorrect_answers.map((answer, index) => (
+            {
+              answer,
+              answerType: 'wrong',
+              dataTesting: `wrong-answer-${index}`,
+            }
+          ));
 
-        answers.push({
-          answer: questions[count].correct_answer,
-          dataTesting: 'correct-answer',
+          answers.push({
+            answer: question.correct_answer,
+            answerType: 'correct',
+            dataTesting: 'correct-answer',
+          });
+          this.setState({ answers });
+          answerArrSort = this.shuffleArray(answers);
+          return answerArrSort;
         });
-        this.setState({ answers });
-        const answerArrSort = this.shuffleArray(answers);
         this.setState({ answerArrSort });
       });
   }
+
   // referencia de codigo:
   // https://www.horadecodar.com.br/2021/05/10/como-embaralhar-um-array-em-javascript-shuffle/
   // Função para randomizar array
@@ -62,7 +76,15 @@ class Game extends Component {
   }
 
   responded = () => {
-    this.setState({ isResponded: true });
+    this.setState({ isResponded: true, isDisabledQuestion: true });
+  }
+
+  nextQuestion = () => {
+    this.setState((prev) => ({
+      isResponded: false,
+      count: prev.count + 1,
+      isDisabledQuestion: false,
+    }));
   }
 
   timerOff = () => {
@@ -70,8 +92,24 @@ class Game extends Component {
     this.responded();
   }
 
+  applyStyle = (answerType) => {
+    const { isResponded } = this.state;
+    if (isResponded) {
+      return this.typeStyle(answerType);
+    }
+  }
+
+  typeStyle = (answerType) => {
+    if (answerType === 'correct') {
+      return this.correctAnswerStyle;
+    }
+    return this.wrongAnswerStyle;
+  }
+
   render() {
-    const { questions, count, answers, isResponded, isDisabledQuestion, answerArrSort } = this.state;
+    const { questions, count,
+      answers, isResponded,
+      isDisabledQuestion, answerArrSort } = this.state;
     return (
       <div>
         <Header />
@@ -98,8 +136,9 @@ class Game extends Component {
               data-testid="answer-options"
             >
               {
-                answerArrSort?.map((answer, index) => (
+                answerArrSort[count]?.map((answer, index) => (
                   <button
+                    style={ this.applyStyle(answer.answerType) }
                     type="button"
                     key={ index }
                     data-testid={ answer.dataTesting }
@@ -113,7 +152,16 @@ class Game extends Component {
               }
             </section>
             {
-              isResponded && <button data-testid="btn-next">Next</button>
+              isResponded
+              && (
+                <button
+                  type="button"
+                  data-testid="btn-next"
+                  onClick={ this.nextQuestion }
+                >
+                  Next
+                </button>
+              )
             }
           </>
         )}
