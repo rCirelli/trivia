@@ -38,7 +38,7 @@ class Game extends Component {
       }).then(() => {
         const { questions } = this.state;
         // Criação do banco de dados das questões com seus respectivos valores
-        let answerArrSort = questions.map((question) => {
+        const answerArrSort = questions.map((question) => {
           const answers = question.incorrect_answers.map((answer, index) => (
             {
               answer,
@@ -53,8 +53,8 @@ class Game extends Component {
             dataTesting: 'correct-answer',
           });
           this.setState({ answers });
-          answerArrSort = this.shuffleArray(answers);
-          return answerArrSort;
+          const answerArrSort2 = this.shuffleArray(answers);
+          return answerArrSort2;
         });
         this.setState({ answerArrSort });
       });
@@ -80,11 +80,15 @@ class Game extends Component {
   }
 
   nextQuestion = () => {
-    this.setState((prev) => ({
-      isResponded: false,
-      count: prev.count + 1,
-      isDisabledQuestion: false,
-    }));
+    const { count } = this.state;
+    const MAX_ARRAY = 4;
+    if (count < MAX_ARRAY) {
+      this.setState((prev) => ({
+        isResponded: false,
+        count: prev.count + 1,
+        isDisabledQuestion: false,
+      }));
+    }
   }
 
   timerOff = () => {
