@@ -1,19 +1,35 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { scoreUp } from '../redux/actions';
 import Header from '../components/Header';
+import Timer from '../components/Timer';
 
 class Game extends Component {
   state = {
+    timerStop: 0,
+    answerArrSort: [],
     questions: '',
     answers: '',
     count: 0,
+    isResponded: false,
+    isDisabledQuestion: false,
+    isPaused: false,
+    isNext: false,
+  }
+
+  correctAnswerStyle = {
+    border: '3px solid rgb(6, 240, 15)',
+  }
+
+  wrongAnswerStyle = {
+    border: '3px solid red',
   }
 
   componentDidMount() {
     const { history } = this.props;
     const RESPONDE_CODE_WRONG = 3;
     const tokenUser = localStorage.getItem('token');
-    console.log(tokenUser);
     fetch(`https://opentdb.com/api.php?amount=5&token=${tokenUser}`)
       .then((response) => response.json()).then((data) => {
         if (data.response_code === RESPONDE_CODE_WRONG) {
@@ -25,22 +41,32 @@ class Game extends Component {
           });
         }
       }).then(() => {
-        const { questions, count } = this.state;
-        const answers = questions[count].incorrect_answers.map((answer, index) => (
-          {
-            answer,
-            dataTesting: `wrong-answer-${index}`,
-          }
-        ));
+        const { questions } = this.state;
+        // Criação do banco de dados das questões com seus respectivos valores
+        const answerArrSort = questions.map((question) => {
+          const answers = question.incorrect_answers.map((answer, index) => (
+            {
+              answer,
+              answerType: 'wrong',
+              dataTesting: `wrong-answer-${index}`,
+            }
+          ));
 
-        answers.push({
-          answer: questions[count].correct_answer,
-          dataTesting: 'correct-answer',
+          answers.push({
+            answer: question.correct_answer,
+            answerType: 'correct',
+            dataTesting: 'correct-answer',
+          });
+          this.setState({ answers });
+          const answerArrSort2 = this.shuffleArray(answers);
+          return answerArrSort2;
         });
-        this.setState({ answers });
+        this.setState({ answerArrSort });
       });
   }
 
+  // referencia de codigo:
+  // https://www.horadecodar.com.br/2021/05/10/como-embaralhar-um-array-em-javascript-shuffle/
   // Função para randomizar array
   shuffleArray = (arr) => {
     // Loop em todos os elementos
@@ -54,11 +80,85 @@ class Game extends Component {
     return arr;
   }
 
+  responded = ({ target: { id } }) => {
+    this.setState({ isResponded: true, isDisabledQuestion: true, isPaused: true });
+    this.scoreboard(id);
+  }
+
+  setTimerStop = (time) => {
+    this.setState({ timerStop: time });
+  }
+
+  scoreboard = (response) => {
+    const { count, questions, timerStop } = this.state;
+    const { dispatch } = this.props;
+    const difficultyValue = {
+      easy: 1,
+      medium: 2,
+      hard: 3,
+    };
+    const { difficulty } = questions[count];
+    const constScore = 10;
+    if (response === questions[count].correct_answer) {
+      const score = constScore + (timerStop * difficultyValue[difficulty]);
+      dispatch(scoreUp({ score }));
+    }
+  }
+
+  nextQuestion = () => {
+    const { count } = this.state;
+    const { history } = this.props;
+    const MAX_ARRAY = 4;
+    if (count < MAX_ARRAY) {
+      this.setState((prev) => ({
+        isResponded: false,
+        count: prev.count + 1,
+        isDisabledQuestion: false,
+        isPaused: false,
+        isNext: true,
+      }));
+    } else {
+      history.push('/feedback');
+    }
+  }
+
+  resetNext = () => {
+    this.setState({ isNext: false });
+  }
+
+  timerOff = () => {
+    this.setState({ isDisabledQuestion: true });
+    this.responded({ target: { value: 'erro' } });
+  }
+
+  applyStyle = (answerType) => {
+    const { isResponded } = this.state;
+    if (isResponded) {
+      return this.typeStyle(answerType);
+    }
+  }
+
+  typeStyle = (answerType) => {
+    if (answerType === 'correct') {
+      return this.correctAnswerStyle;
+    }
+    return this.wrongAnswerStyle;
+  }
+
   render() {
-    const { questions, count, answers } = this.state;
+    const { questions, count, isPaused,
+      answers, isResponded, isNext,
+      isDisabledQuestion, answerArrSort } = this.state;
     return (
       <div>
         <Header />
+        <Timer
+          setTimerStop={ this.setTimerStop }
+          timerOff={ this.timerOff }
+          isPaused={ isPaused }
+          isNext={ isNext }
+          resetNext={ this.resetNext }
+        />
         {answers && (
           <>
             <h3
@@ -79,11 +179,15 @@ class Game extends Component {
               data-testid="answer-options"
             >
               {
-                this.shuffleArray(answers).map((answer, index) => (
+                answerArrSort[count]?.map((answer, index) => (
                   <button
+                    style={ this.applyStyle(answer.answerType) }
                     type="button"
+                    id={ answer.answer }
                     key={ index }
                     data-testid={ answer.dataTesting }
+                    disabled={ isDisabledQuestion }
+                    onClick={ (event) => this.responded(event) }
                   >
                     {answer.answer}
 
@@ -91,6 +195,18 @@ class Game extends Component {
                 ))
               }
             </section>
+            {
+              isResponded
+              && (
+                <button
+                  type="button"
+                  data-testid="btn-next"
+                  onClick={ this.nextQuestion }
+                >
+                  Next
+                </button>
+              )
+            }
           </>
         )}
 
@@ -100,8 +216,13 @@ class Game extends Component {
   }
 }
 
-export default Game;
+const mapStateToProps = (state) => ({
+  timerResponse: state.player.timerResponse,
+});
+
+export default connect(mapStateToProps)(Game);
 
 Game.propTypes = {
   history: PropTypes.objectOf(PropTypes.any).isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
