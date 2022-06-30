@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import Input from '../components/Input';
 import { dataUser } from '../redux/actions';
 import api from '../service/api';
@@ -90,4 +91,6 @@ Login.propTypes = {
   dispatch: PropTypes.func.isRequired,
 };
 
-export default connect()(Login);
+export default connect()(withRouter(Login));
+
+// referencia withRouter usado para crição do teste que tenham history.push() em sua construção: https://thewebdev.info/2022/03/08/how-to-fix-the-cannot-read-property-push-of-undefined-error-with-react-router/#:~:text=with%20React%20Router%3F-,To%20fix%20the%20%22Cannot%20read%20property%20'push'%20of%20undefined,props.
