@@ -161,18 +161,18 @@ class Game extends Component {
         />
         {answers && (
           <>
-            <h3
-              data-testid="question-category"
-            >
+            <h3>
               Categoria:
               {' '}
+            </h3>
+            <h3 data-testid="question-category">
               {questions[count].category}
             </h3>
-            <h3
-              data-testid="question-text"
-            >
+            <h3>
               Pergunta:
               {' '}
+            </h3>
+            <h3 data-testid="question-text">
               {questions[count].question}
             </h3>
             <section
