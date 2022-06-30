@@ -2,8 +2,8 @@ import { DATA_USER, TIMER_RESPONSE, SCORE_UP } from '../actions/index';
 
 const INITIAL_STATE = {
   name: '',
-  assertions: '',
-  score: '',
+  assertions: 0,
+  score: 0,
   gravatarEmail: '',
   timerResponse: 0,
 };
@@ -26,6 +26,7 @@ export default function player(state = INITIAL_STATE, action) {
     return ({
       ...state,
       score: +(state.score) + +(action.payload.score),
+      assertions: +(state.assertions) + 1,
     });
   }
   return state;
