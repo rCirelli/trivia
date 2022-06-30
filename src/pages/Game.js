@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { scoreUp, clearScore } from '../redux/actions';
+import { scoreUp } from '../redux/actions';
 import Header from '../components/Header';
 import Timer from '../components/Timer';
 
@@ -124,12 +124,11 @@ class Game extends Component {
   }
 
   saveRanking = () => {
-    const { score, name, gravatarEmail, dispatch } = this.props;
+    const { score, name, gravatarEmail } = this.props;
     let ranking = localStorage.getItem('ranking') || '[]';
     ranking = JSON.parse(ranking);
     ranking.push({ score, name, picture: gravatarEmail });
     localStorage.setItem('ranking', JSON.stringify(ranking));
-    dispatch(clearScore());
   }
 
   resetNext = () => {
