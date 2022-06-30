@@ -1,9 +1,9 @@
-import { DATA_USER, TIMER_RESPONSE, SCORE_UP } from '../actions/index';
+import { DATA_USER, TIMER_RESPONSE, SCORE_UP, CLEAR_SCORE } from '../actions/index';
 
 const INITIAL_STATE = {
   name: '',
-  assertions: '',
-  score: '',
+  assertions: 0,
+  score: 0,
   gravatarEmail: '',
   timerResponse: 0,
 };
@@ -13,7 +13,13 @@ export default function player(state = INITIAL_STATE, action) {
     return ({
       ...state,
       name: action.payload.name,
-      email: action.payload.email,
+      gravatarEmail: action.payload.email,
+    });
+  }
+  if (action.type === CLEAR_SCORE) {
+    return ({
+      ...state,
+      score: 0,
     });
   }
   if (action.type === TIMER_RESPONSE) {
@@ -26,6 +32,7 @@ export default function player(state = INITIAL_STATE, action) {
     return ({
       ...state,
       score: +(state.score) + +(action.payload.score),
+      assertions: +(state.assertions) + 1,
     });
   }
   return state;

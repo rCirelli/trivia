@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { scoreUp } from '../redux/actions';
+import { scoreUp, clearScore } from '../redux/actions';
 import Header from '../components/Header';
 import Timer from '../components/Timer';
 
@@ -118,8 +118,18 @@ class Game extends Component {
         isNext: true,
       }));
     } else {
+      this.saveRanking();
       history.push('/feedback');
     }
+  }
+
+  saveRanking = () => {
+    const { score, name, gravatarEmail, dispatch } = this.props;
+    let ranking = localStorage.getItem('ranking') || '[]';
+    ranking = JSON.parse(ranking);
+    ranking.push({ score, name, picture: gravatarEmail });
+    localStorage.setItem('ranking', JSON.stringify(ranking));
+    dispatch(clearScore());
   }
 
   resetNext = () => {
@@ -161,18 +171,18 @@ class Game extends Component {
         />
         {answers && (
           <>
-            <h3
-              data-testid="question-category"
-            >
+            <h3>
               Categoria:
               {' '}
+            </h3>
+            <h3 data-testid="question-category">
               {questions[count].category}
             </h3>
-            <h3
-              data-testid="question-text"
-            >
+            <h3>
               Pergunta:
               {' '}
+            </h3>
+            <h3 data-testid="question-text">
               {questions[count].question}
             </h3>
             <section
@@ -218,6 +228,9 @@ class Game extends Component {
 
 const mapStateToProps = (state) => ({
   timerResponse: state.player.timerResponse,
+  name: state.player.name,
+  gravatarEmail: state.player.gravatarEmail,
+  score: state.player.score,
 });
 
 export default connect(mapStateToProps)(Game);
@@ -225,4 +238,7 @@ export default connect(mapStateToProps)(Game);
 Game.propTypes = {
   history: PropTypes.objectOf(PropTypes.any).isRequired,
   dispatch: PropTypes.func.isRequired,
+  name: PropTypes.string.isRequired,
+  gravatarEmail: PropTypes.string.isRequired,
+  score: PropTypes.number.isRequired,
 };
