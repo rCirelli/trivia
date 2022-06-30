@@ -64,7 +64,7 @@ class Timer extends Component {
 Timer.propTypes = {
   timerOff: PropTypes.func.isRequired,
   isPaused: PropTypes.bool.isRequired,
-  setTimerStop: PropTypes.bool.isRequired,
+  setTimerStop: PropTypes.func.isRequired,
   isNext: PropTypes.bool.isRequired,
   resetNext: PropTypes.func.isRequired,
 };
