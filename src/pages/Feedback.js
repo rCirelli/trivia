@@ -29,8 +29,14 @@ class Feedback extends Component {
             : <h1 data-testid="feedback-text">Well Done!</h1>
         }
         <div>
-          <h1 data-testid="feedback-total-score">{ score }</h1>
-          <h1 data-testid="feedback-total-question">{ assertions }</h1>
+          <span>
+            Score:
+            <h1 data-testid="feedback-total-score">{ score }</h1>
+          </span>
+          <span>
+            Acertos:
+            <h1 data-testid="feedback-total-question">{ assertions }</h1>
+          </span>
         </div>
 
         <button
