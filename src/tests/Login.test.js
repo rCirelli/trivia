@@ -117,7 +117,7 @@ describe('Crie uma tela de login', () => {
     expect(btnPlay).not.toBeDisabled();
     userEvent.click(btnPlay);
     expect(global.fetch).toBeCalled();
-    expect(global.fetch).toBeCalledWith('https://opentdb.com/api_token.php?command=request')
-  })
+    expect(global.fetch).toBeCalledWith('https://opentdb.com/api_token.php?command=request');
+  });
 
 })
