@@ -4,10 +4,15 @@ export const TOKEN_RESPONSE = 'TOKEN_RESPONSE';
 export const DATA_USER = 'DATA_USER';
 export const TIMER_RESPONSE = 'TIMER_RESPONSE';
 export const SCORE_UP = 'SCORE_UP';
+export const CLEAR_SCORE = 'CLEAR_SCORE';
 
 const tokenResponse = (state) => ({
   type: TOKEN_RESPONSE,
   payload: state,
+});
+
+export const clearScore = () => ({
+  type: CLEAR_SCORE,
 });
 
 export const dataUser = (state) => ({

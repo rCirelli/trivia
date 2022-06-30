@@ -1,4 +1,4 @@
-import { DATA_USER, TIMER_RESPONSE, SCORE_UP } from '../actions/index';
+import { DATA_USER, TIMER_RESPONSE, SCORE_UP, CLEAR_SCORE } from '../actions/index';
 
 const INITIAL_STATE = {
   name: '',
@@ -13,7 +13,13 @@ export default function player(state = INITIAL_STATE, action) {
     return ({
       ...state,
       name: action.payload.name,
-      email: action.payload.email,
+      gravatarEmail: action.payload.email,
+    });
+  }
+  if (action.type === CLEAR_SCORE) {
+    return ({
+      ...state,
+      score: 0,
     });
   }
   if (action.type === TIMER_RESPONSE) {

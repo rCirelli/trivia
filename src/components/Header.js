@@ -21,7 +21,7 @@ class Header extends Component {
       <header style={ this.headerStyle }>
         <div style={ { display: 'flex', alignItems: 'center' } }>
           <img
-            src={ `https://www.gravatar.com/avatar/${this.hashEmail(player.email)}` }
+            src={ `https://www.gravatar.com/avatar/${this.hashEmail(player.gravatarEmail)}` }
             width={ 70 }
             alt="profile"
             data-testid="header-profile-picture"
@@ -44,7 +44,6 @@ class Header extends Component {
 Header.propTypes = {
   player: PropTypes.shape({
     name: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired,
     assertions: PropTypes.string.isRequired,
     score: PropTypes.string.isRequired,
     gravatarEmail: PropTypes.string.isRequired,
