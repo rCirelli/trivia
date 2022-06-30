@@ -2,10 +2,23 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Header from '../components/Header';
+import { clearScore } from '../redux/actions';
 
 class Feedback extends Component {
+  state = {
+    assertions: 0,
+    score: 0,
+  }
+
+  componentDidMount() {
+    const { dispatch, assertions, score } = this.props;
+    this.setState({ assertions, score });
+    dispatch(clearScore());
+  }
+
   render() {
-    const { history, assertions, score } = this.props;
+    const { history } = this.props;
+    const { assertions, score } = this.state;
     const MIN_ASSERTIONS = 3;
     return (
       <div>
@@ -50,6 +63,7 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps)(Feedback);
 
 Feedback.propTypes = {
+  dispatch: PropTypes.func.isRequired,
   history: PropTypes.objectOf(PropTypes.any).isRequired,
   assertions: PropTypes.number.isRequired,
   score: PropTypes.number.isRequired,
