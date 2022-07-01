@@ -59,22 +59,23 @@ const questions = {
                   ]
                 }
     ]
-  }
+  };
+
+  const initialState = { player : {
+    name: 'test',
+    assertions:'',
+    score:0,
+    gravatarEmail:'test@test.com',
+    timerResponse:0,
+    },
+    ranking: {
+        ranking: [],
+        token: ''
+    }
+};  
 
 describe('Testando page Game', () => {
     test('Testando informações Header', () => {
-        const initialState = { player : {
-            name: 'test',
-            assertions:'',
-            score:0,
-            gravatarEmail:'test@test.com',
-            timerResponse:0,
-            },
-            ranking: {
-                ranking: [],
-                token: ''
-            }
-        };
         const { history } = renderWithRouterAndRedux(<App />, 
             initialState,
             '/Game',
@@ -93,20 +94,8 @@ describe('Testando page Game', () => {
         const valueTimer = screen.getByText(/30/i);
         expect(valueTimer).toBeInTheDocument();
       });
-      test('Testando informações das perguntas', async () => {
-        const initialState = { player : {
-            name: 'test',
-            assertions:'',
-            score:0,
-            gravatarEmail:'test@test.com',
-            timerResponse:0,
-            },
-            ranking: {
-                ranking: [],
-                token: ''
-            }
-        };        
-          jest.spyOn(global, 'fetch');
+      test('Testando informações das perguntas', async () => {      
+          const mock = jest.spyOn(global, 'fetch');
           global.fetch.mockResolvedValue({
             json: jest.fn().mockResolvedValue(questions),
           });
@@ -135,25 +124,13 @@ describe('Testando page Game', () => {
         userEvent.click(nextButton);
         const newQuestion = await screen.findByText(/Estou na proxima pergunta?/i);
         expect(newQuestion).toBeInTheDocument();
-        // for(let i = 0; i < 5; i += 1) {
-        //     userEvent.click(correctButton);
-        //     userEvent.click(nextButton);
-        // }
-        // expect(history.location.pathname).toBe('/Feedback');
+        mock.mockRestore();
       });
-      test('Testando se responde as 5 perguntas', async () => {
-        const initialState = { player : {
-            name: 'test',
-            assertions:'',
-            score:0,
-            gravatarEmail:'test@test.com',
-            timerResponse:0,
-            },
-            ranking: {
-                ranking: [],
-                token: ''
-            }
-        };        
+      test('Testando se responde as 5 perguntas', async () => {  
+        const mock = jest.spyOn(global, 'fetch');
+          global.fetch.mockResolvedValue({
+            json: jest.fn().mockResolvedValue(questions),
+          });   
           const { history } = renderWithRouterAndRedux(<App />, 
             initialState,
             '/Game',
@@ -166,5 +143,20 @@ describe('Testando page Game', () => {
             userEvent.click(nextButton);
         }
         expect(history.location.pathname).toBe('/feedback');
+        mock.mockRestore();
       });
+      // test('Testando retorno sem token', async () => {
+      //   jest.spyOn(global, 'fetch');
+      //     global.fetch.mockResolvedValue({
+      //       json: jest.fn().mockResolvedValue({
+      //           response_code:3,
+      //           results:[]
+      //       }),
+      //     });        
+      //     const { history } = renderWithRouterAndRedux(<App />, 
+      //       initialState,
+      //       '/Game',
+      //     );
+      //   expect(history.location.pathname).toBe('/');
+      // });
 })
