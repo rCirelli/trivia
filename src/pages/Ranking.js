@@ -18,8 +18,7 @@ class Ranking extends Component {
   render() {
     const { history } = this.props;
     const { ranking } = this.state;
-    console.log(ranking);
-    console.log(ranking.sort((a, b) => b.score - a.score));
+
     return (
       <div>
         <h1
@@ -30,7 +29,7 @@ class Ranking extends Component {
         </h1>
         {/* <Header /> */}
         {
-          ranking.sort((a, b) => b.score - a.score).map((rank, index) => (
+          ranking?.sort((a, b) => b.score - a.score).map((rank, index) => (
             <span key={ index }>
               <img
                 src={ `https://www.gravatar.com/avatar/${this.hashEmail(rank.picture)}` }

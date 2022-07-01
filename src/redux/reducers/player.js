@@ -20,6 +20,7 @@ export default function player(state = INITIAL_STATE, action) {
     return ({
       ...state,
       score: 0,
+      assertions: 0,
     });
   }
   if (action.type === TIMER_RESPONSE) {
