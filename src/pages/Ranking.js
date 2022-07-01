@@ -26,7 +26,7 @@ class Ranking extends Component {
           Ranking
         </h1>
         {
-          ranking.sort((a, b) => b.score - a.score).map((rank, index) => (
+          ranking && ranking.sort((a, b) => b.score - a.score).map((rank, index) => (
             <div key={ index }>
               <img
                 src={ `https://www.gravatar.com/avatar/${this.hashEmail(rank.picture)}` }

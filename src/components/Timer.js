@@ -41,7 +41,6 @@ class Timer extends Component {
     const { counter, timerId } = this.state;
     const { timerOff } = this.props;
     if ((counter === 0 && timerId !== '')) {
-      console.log('setTimer');
       clearInterval(timerId);
       this.setState({ timerId: '' });
       timerOff();
@@ -54,7 +53,7 @@ class Timer extends Component {
       <div>
         <span>
           TIMER:
-          { counter }
+          <p data-testid="timer-header">{ counter }</p>
         </span>
       </div>
     );

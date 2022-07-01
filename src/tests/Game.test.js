@@ -64,7 +64,7 @@ const questions = {
   const initialState = { player : {
     name: 'test',
     assertions:'',
-    score:0,
+    score:100,
     gravatarEmail:'test@test.com',
     timerResponse:0,
     },
@@ -160,4 +160,32 @@ describe('Testando page Game', () => {
         expect(history.location.pathname).toBe('/Game');
         mock.mockRestore();
       });
+      it('teste timer', async () => {
+        jest.useFakeTimers();
+        jest.spyOn(global, 'clearInterval');
+        jest.spyOn(global, 'setInterval');
+        const mock = jest.spyOn(global, 'fetch');
+        global.fetch.mockResolvedValue({
+          json: jest.fn().mockResolvedValue(questions),
+        });
+        const { history } = renderWithRouterAndRedux(<App />, 
+            initialState,
+            '/Game',
+          );
+          expect(setInterval).toHaveBeenCalledTimes(1);
+
+          const timerHeader = await screen.findByText('29');
+          expect(timerHeader).toBeInTheDocument();
+
+          const correctButton = await screen.findByTestId('correct-answer');
+          userEvent.click(correctButton);
+          
+          expect(clearInterval).toHaveBeenCalledTimes(1);
+          const btnNext = await screen.findByTestId('btn-next');
+          userEvent.click(btnNext);
+
+          jest.advanceTimersByTime(30000);
+          const timerHeader2 = screen.getByTestId('timer-header');
+          expect(timerHeader2).toHaveTextContent('0');
+        });  
 })
