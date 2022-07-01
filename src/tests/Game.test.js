@@ -149,8 +149,8 @@ describe('Testando page Game', () => {
       //   jest.spyOn(global, 'fetch');
       //     global.fetch.mockResolvedValue({
       //       json: jest.fn().mockResolvedValue({
-      //           response_code:3,
-      //           results:[]
+      //         response_code:3,
+      //         results:[]
       //       }),
       //     });        
       //     const { history } = renderWithRouterAndRedux(<App />, 

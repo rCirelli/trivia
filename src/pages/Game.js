@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { scoreUp } from '../redux/actions';
+import { withRouter } from 'react-router';
+import { scoreUp, clearScore } from '../redux/actions';
 import Header from '../components/Header';
 import Timer from '../components/Timer';
 
@@ -27,7 +28,8 @@ class Game extends Component {
   }
 
   componentDidMount() {
-    const { history } = this.props;
+    const { history, dispatch } = this.props;
+    dispatch(clearScore());
     const RESPONDE_CODE_WRONG = 3;
     const tokenUser = localStorage.getItem('token');
     fetch(`https://opentdb.com/api.php?amount=5&token=${tokenUser}`)
@@ -232,7 +234,7 @@ const mapStateToProps = (state) => ({
   score: state.player.score,
 });
 
-export default connect(mapStateToProps)(Game);
+export default connect(mapStateToProps)(withRouter(Game));
 
 Game.propTypes = {
   history: PropTypes.objectOf(PropTypes.any).isRequired,
