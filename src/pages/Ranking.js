@@ -26,16 +26,16 @@ class Ranking extends Component {
           Ranking
         </h1>
         {
-          ranking?.sort((a, b) => b.score - a.score).map((rank, index) => (
+          ranking.sort((a, b) => b.score - a.score).map((rank, index) => (
             <div key={ index }>
-              {/* <img
-                src={`https://www.gravatar.com/avatar/${this.hashEmail(rank.picture)}`}
+              <img
+                src={ `https://www.gravatar.com/avatar/${this.hashEmail(rank.picture)}` }
                 width={ 50 }
                 alt="profile"
                 data-testid="header-profile-picture"
               />
               <p data-testid={ `player-name-${index}` }>{rank.name}</p>
-              <p data-testid={ `player-score-${index}` }>{rank.score}</p> */}
+              <p data-testid={ `player-score-${index}` }>{rank.score}</p>
             </div>
           ))
         }
