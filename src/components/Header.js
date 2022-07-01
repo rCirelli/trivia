@@ -44,7 +44,7 @@ class Header extends Component {
 Header.propTypes = {
   player: PropTypes.shape({
     name: PropTypes.string.isRequired,
-    assertions: PropTypes.number.isRequired,
+    assertions: PropTypes.string.isRequired,
     score: PropTypes.number.isRequired,
     gravatarEmail: PropTypes.string.isRequired,
   }).isRequired,

@@ -102,7 +102,7 @@ describe('Crie uma tela de login', () => {
     expect(btnPlay).not.toBeDisabled();
     userEvent.click(btnPlay);
 
-    expect(store.getState().player.email).toBe(VALID_USER_EMAIL);
+    expect(store.getState().player.gravatarEmail).toBe(VALID_USER_EMAIL);
     expect(store.getState().player.name).toBe(VALID_USER_NAME);
   });
 

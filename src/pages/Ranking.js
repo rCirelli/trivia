@@ -18,19 +18,16 @@ class Ranking extends Component {
   render() {
     const { history } = this.props;
     const { ranking } = this.state;
-
     return (
       <div>
         <h1
-          // Requisito 16
           data-testid="ranking-title"
         >
           Ranking
         </h1>
-        {/* <Header /> */}
         {
-          ranking?.sort((a, b) => b.score - a.score).map((rank, index) => (
-            <span key={ index }>
+          ranking.sort((a, b) => b.score - a.score).map((rank, index) => (
+            <div key={ index }>
               <img
                 src={ `https://www.gravatar.com/avatar/${this.hashEmail(rank.picture)}` }
                 width={ 50 }
@@ -39,7 +36,7 @@ class Ranking extends Component {
               />
               <p data-testid={ `player-name-${index}` }>{rank.name}</p>
               <p data-testid={ `player-score-${index}` }>{rank.score}</p>
-            </span>
+            </div>
           ))
         }
         <button
