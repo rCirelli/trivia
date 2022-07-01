@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
 import { scoreUp, clearScore } from '../redux/actions';
 import Header from '../components/Header';
 import Timer from '../components/Timer';
@@ -10,7 +9,7 @@ class Game extends Component {
   state = {
     timerStop: 0,
     answerArrSort: [],
-    questions: '',
+    questions: [],
     answers: '',
     count: 0,
     isResponded: false,
@@ -234,7 +233,7 @@ const mapStateToProps = (state) => ({
   score: state.player.score,
 });
 
-export default connect(mapStateToProps)(withRouter(Game));
+export default connect(mapStateToProps)(Game);
 
 Game.propTypes = {
   history: PropTypes.objectOf(PropTypes.any).isRequired,

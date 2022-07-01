@@ -145,18 +145,19 @@ describe('Testando page Game', () => {
         expect(history.location.pathname).toBe('/feedback');
         mock.mockRestore();
       });
-      // test('Testando retorno sem token', async () => {
-      //   jest.spyOn(global, 'fetch');
-      //     global.fetch.mockResolvedValue({
-      //       json: jest.fn().mockResolvedValue({
-      //         response_code:3,
-      //         results:[]
-      //       }),
-      //     });        
-      //     const { history } = renderWithRouterAndRedux(<App />, 
-      //       initialState,
-      //       '/Game',
-      //     );
-      //   expect(history.location.pathname).toBe('/');
-      // });
+      test('Testando retorno sem token', async () => {
+        const mock = jest.spyOn(global, 'fetch');
+          global.fetch.mockResolvedValue({
+            json: jest.fn().mockResolvedValue({
+              response_code:3,
+              results:[]
+            }),
+          });        
+          const { history } = renderWithRouterAndRedux(<App />, 
+            initialState,
+            '/Game',
+          );
+        expect(history.location.pathname).toBe('/Game');
+        mock.mockRestore();
+      });
 })
