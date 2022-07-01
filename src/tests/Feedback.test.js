@@ -9,7 +9,7 @@ const INITIAL_STATE = {
   player: {
     name: 'Nome da Pessoa',
     assertions: 2,
-    score: 0,
+    score: 100,
     gravatarEmail: 'email@dapessoa.com',
     timerResponse: 0,
   },
@@ -48,4 +48,13 @@ describe('Testa a tela de Feedbacks', () => {
 
     expect(history.location.pathname).toBe('/ranking');
   });
+  it('verifica score do header', () => {
+    const { history } = renderWithRouterAndRedux(<App />, INITIAL_STATE, '/feedback' );
+
+    const scoreHeader = screen.getByTestId('header-score');
+    expect(scoreHeader).toBeInTheDocument();
+
+    expect(scoreHeader).toHaveTextContent(100);
+  });
+
 });
