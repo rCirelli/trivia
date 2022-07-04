@@ -50,11 +50,16 @@ class Timer extends Component {
   render() {
     const { counter } = this.state;
     return (
-      <div>
-        <span>
-          TIMER:
-          <p data-testid="timer-header">{ counter }</p>
-        </span>
+      <div
+        className="rounded-full border border-purple-500 h-[50px] w-[50px]
+        flex justify-center items-center p-5"
+      >
+        <p
+          className="text-lg font-bold text-purple-200 animate-ping"
+          data-testid="timer-header"
+        >
+          { counter }
+        </p>
       </div>
     );
   }

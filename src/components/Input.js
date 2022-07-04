@@ -5,9 +5,13 @@ class Input extends Component {
   render() {
     const { textLabel, type, id, name, value, dataTestid, handleChange } = this.props;
     return (
-      <label htmlFor={ id }>
+      <label
+        htmlFor={ id }
+        className="flex flex-col text-purple-900 font-bold text-center"
+      >
         { textLabel }
         <input
+          className="border border-1 border- rounded p-1"
           name={ name }
           id={ id }
           type={ type }

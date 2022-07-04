@@ -4,13 +4,13 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 class Header extends Component {
-  headerStyle = {
-    border: '1px solid black',
-    padding: '20px 25px',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  };
+  // headerStyle = {
+  //   border: '1px solid black',
+  //   padding: '20px 25px',
+  //   display: 'flex',
+  //   justifyContent: 'space-between',
+  //   alignItems: 'center',
+  // };
 
   hashEmail = (email) => md5(email).toString();
 
@@ -18,8 +18,12 @@ class Header extends Component {
     const { player } = this.props;
 
     return (
-      <header style={ this.headerStyle }>
-        <div style={ { display: 'flex', alignItems: 'center' } }>
+      <header
+        className="flex pr-5 justify-between items-center bg-[#3B254F]"
+      >
+        <div
+          className="flex items-center"
+        >
           <img
             src={ `https://www.gravatar.com/avatar/${this.hashEmail(player.gravatarEmail)}` }
             width={ 70 }
@@ -28,8 +32,10 @@ class Header extends Component {
           />
           <span data-testid="header-player-name">{ player.name }</span>
         </div>
-        <div>
-          <span>Score:</span>
+        <div
+          className="text-purple-100"
+        >
+          <span>Score: </span>
           <span
             data-testid="header-score"
           >

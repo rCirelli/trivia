@@ -66,6 +66,8 @@ class Game extends Component {
       });
   }
 
+  decodeUtf8 = (s) => decodeURI(s);
+
   // referencia de codigo:
   // https://www.horadecodar.com.br/2021/05/10/como-embaralhar-um-array-em-javascript-shuffle/
   // Função para randomizar array
@@ -148,11 +150,17 @@ class Game extends Component {
     }
   }
 
+  // typeStyle = (answerType) => {
+  //   if (answerType === 'correct') {
+  //     return this.correctAnswerStyle;
+  //   }
+  //   return this.wrongAnswerStyle;
+  // }
   typeStyle = (answerType) => {
     if (answerType === 'correct') {
-      return this.correctAnswerStyle;
+      return "bg-green-500";
     }
-    return this.wrongAnswerStyle;
+    return "bg-red-600";
   }
 
   render() {
@@ -160,68 +168,74 @@ class Game extends Component {
       answers, isResponded, isNext,
       isDisabledQuestion, answerArrSort } = this.state;
     return (
-      <div>
+      <>
         <Header />
-        <Timer
-          setTimerStop={ this.setTimerStop }
-          timerOff={ this.timerOff }
-          isPaused={ isPaused }
-          isNext={ isNext }
-          resetNext={ this.resetNext }
-        />
-        {answers && (
-          <>
-            <h3>
-              Categoria:
-              {' '}
-            </h3>
-            <h3 data-testid="question-category">
-              {questions[count].category}
-            </h3>
-            <h3>
-              Pergunta:
-              {' '}
-            </h3>
-            <h3 data-testid="question-text">
-              {questions[count].question}
-            </h3>
-            <section
-              data-testid="answer-options"
-            >
-              {
-                answerArrSort[count]?.map((answer, index) => (
-                  <button
-                    style={ this.applyStyle(answer.answerType) }
-                    type="button"
-                    id={ answer.answer }
-                    key={ index }
-                    data-testid={ answer.dataTesting }
-                    disabled={ isDisabledQuestion }
-                    onClick={ (event) => this.responded(event) }
-                  >
-                    {answer.answer}
-
-                  </button>
-                ))
-              }
-            </section>
-            {
-              isResponded
-              && (
-                <button
-                  type="button"
-                  data-testid="btn-next"
-                  onClick={ this.nextQuestion }
+        <div className="p-10 flex flex-col w-full">
+          <Timer
+            setTimerStop={ this.setTimerStop }
+            timerOff={ this.timerOff }
+            isPaused={ isPaused }
+            isNext={ isNext }
+            resetNext={ this.resetNext }
+          />
+          <div className="pt-10 rounded-lg bg-purple-100">
+            {answers && (
+              <div
+                className="flex flex-col justify-center items-center
+                gap-5 text-center"
+              >
+                <h3
+                  data-testid="question-category"
+                  className="text-purple-900 font-bold"
                 >
-                  Next
-                </button>
-              )
-            }
-          </>
-        )}
+                  {questions[count].category}
+                </h3>
+                <h2
+                  data-testid="question-text"
+                  className="text-purple-900 px-10 text-lg"
+                >
+                  {this.decodeUtf8(questions[count].question)}
+                </h2>
+                <section
+                  data-testid="answer-options"
+                >
+                  <div className="flex flex-wrap justify-center m-auto w-9/12 gap-5 mb-10">
+                    {
+                    answerArrSort[count]?.map((answer, index) => (
+                      <button
+                        className={`font-medium p-3 w-48 h-20 rounded-lg bg-[#07DBAC] ${this.applyStyle(answer.answerType)}`}
+                        type="button"
+                        id={ answer.answer }
+                        key={ index }
+                        data-testid={ answer.dataTesting }
+                        disabled={ isDisabledQuestion }
+                        onClick={ (event) => this.responded(event) }
+                      >
+                        {answer.answer}
+                      </button>
+                    ))
+                    }
+                  </div>
+                </section>
+                {
+                  isResponded
+                && (
+                  <button
+                    className="w-full rounded-b-lg py-3 bg-[#07DBAC] text-lg font-medium"
+                    type="button"
+                    data-testid="btn-next"
+                    onClick={ this.nextQuestion }
+                  >
+                    Next
+                  </button>
+                )
+                }
+              </div>
+            )}
+          </div>
 
-      </div>
-
+        </div>
+      </>
     );
   }
 }

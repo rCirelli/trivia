@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import Input from '../components/Input';
 import { dataUser } from '../redux/actions';
+import logo from '../trivia.png';
+import '../App.css';
 import api from '../service/api';
 
 class Login extends Component {
@@ -19,68 +21,77 @@ class Login extends Component {
       return this.setState({ isDisabled: true });
     }
     return this.setState({ isDisabled: false });
-  }
+  };
 
   handleChange = ({ target: { name, value } }) => {
     this.setState({ [name]: value }, this.valitadionButton());
-  }
+  };
 
   saveLocalStorage = async () => {
     const response = await api();
     localStorage.setItem('token', response.token);
-  }
+  };
 
   submit = () => {
     const { history, dispatch } = this.props;
     const newState = { ...this.state };
     delete newState.isDisabled;
     dispatch(dataUser(newState));
-    this.saveLocalStorage()
-      .then(() => history.push('/game'));
-  }
+    this.saveLocalStorage().then(() => history.push('/game'));
+  };
 
   config = () => {
     const { history } = this.props;
     history.push('/config');
-  }
+  };
 
   render() {
     const { name, email, isDisabled } = this.state;
     return (
-      <div>
-        <Input
-          textLabel="Nome"
-          type="text"
-          id="name"
-          name="name"
-          value={ name }
-          handleChange={ this.handleChange }
-          dataTestid="input-player-name"
-        />
-        <Input
-          textLabel="Email"
-          type="text"
-          id="email"
-          name="email"
-          value={ email }
-          handleChange={ this.handleChange }
-          dataTestid="input-gravatar-email"
-        />
-        <button
-          data-testid="btn-play"
-          type="button"
-          disabled={ isDisabled }
-          onClick={ this.submit }
+      <div className="flex flex-col justify-evenly items-center h-full">
+        <img className="App-logo max-w-md" src={ logo } alt="trivia" />
+        <div
+          className="flex flex-col justify-center items-center gap-7 bg-[#07DBAC]
+          px-10 py-7 rounded-lg"
         >
-          Play
-        </button>
-        <button
-          data-testid="btn-settings"
-          type="button"
-          onClick={ this.config }
-        >
-          Configurações
-        </button>
+          <Input
+            textLabel="Nome"
+            type="text"
+            id="name"
+            name="name"
+            value={ name }
+            handleChange={ this.handleChange }
+            dataTestid="input-player-name"
+          />
+          <Input
+            textLabel="Email"
+            type="text"
+            id="email"
+            name="email"
+            value={ email }
+            handleChange={ this.handleChange }
+            dataTestid="input-gravatar-email"
+          />
+          <button
+            className="p-2 w-full rounded-lg bg-purple-700 text-purple-200 font-bold
+            hover:bg-purple-600"
+            data-testid="btn-play"
+            type="button"
+            disabled={ isDisabled }
+            onClick={ this.submit }
+          >
+            Play
+          </button>
+          <button
+            className="p-2 w-full rounded-lg bg-purple-700 text-purple-200 font-bold
+            hover:bg-purple-600"
+            data-testid="btn-settings"
+            type="button"
+            onClick={ this.config }
+          >
+            Configurações
+          </button>
+        </div>
       </div>
     );
   }
