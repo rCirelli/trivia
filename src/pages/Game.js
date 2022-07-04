@@ -16,6 +16,7 @@ class Game extends Component {
     isDisabledQuestion: false,
     isPaused: false,
     isNext: false,
+    selectedAnswer: '',
   }
 
   correctAnswerStyle = {
@@ -83,9 +84,10 @@ class Game extends Component {
     return arr;
   }
 
-  responded = ({ target: { id } }) => {
+  responded = ({ target, target: { id } }) => {
     this.setState({ isResponded: true, isDisabledQuestion: true, isPaused: true });
     this.scoreboard(id);
+    this.setState({ selectedAnswer: target.innerText })
   }
 
   setTimerStop = (time) => {
@@ -143,8 +145,11 @@ class Game extends Component {
     this.responded({ target: { value: 'erro' } });
   }
 
-  applyStyle = (answerType) => {
-    const { isResponded } = this.state;
+  applyStyle = ({ answer, answerType }) => {
+    const { isResponded, selectedAnswer } = this.state;
+    if (isResponded && selectedAnswer === answer) {
+      return `${this.typeStyle(answerType)} border border-4 border-violet-700 animate-pulse`;
+    }
     if (isResponded) {
       return this.typeStyle(answerType);
     }
@@ -170,7 +175,7 @@ class Game extends Component {
     return (
       <>
         <Header />
-        <div className="p-10 flex flex-col w-full">
+        <div className="py-10 flex flex-col justify-center items-center w-full">
           <Timer
             setTimerStop={ this.setTimerStop }
             timerOff={ this.timerOff }
@@ -178,7 +183,7 @@ class Game extends Component {
             isNext={ isNext }
             resetNext={ this.resetNext }
           />
-          <div className="pt-10 rounded-lg bg-purple-100">
+          <div className="mt-7 pt-7 rounded-lg bg-violet-100 max-w-3xl">
             {answers && (
               <div
                 className="flex flex-col justify-center items-center
@@ -186,24 +191,25 @@ class Game extends Component {
               >
                 <h3
                   data-testid="question-category"
-                  className="text-purple-900 font-bold"
+                  className="text-violet-900 font-bold"
                 >
                   {questions[count].category}
                 </h3>
                 <h2
                   data-testid="question-text"
-                  className="text-purple-900 px-10 text-lg"
+                  className="text-violet-900 px-10 text-lg"
                 >
                   {this.decodeUtf8(questions[count].question)}
                 </h2>
                 <section
                   data-testid="answer-options"
+                  className="flex flex-col justify-center items-center"
                 >
-                  <div className="flex flex-wrap justify-center m-auto w-9/12 gap-5 mb-10">
+                  <div className="flex flex-wrap justify-center items-center m-auto w-9/12 gap-5 mb-5">
                     {
                     answerArrSort[count]?.map((answer, index) => (
                       <button
-                        className={`font-medium p-3 w-48 h-20 rounded-lg bg-[#07DBAC] ${this.applyStyle(answer.answerType)}`}
+                        className={`font-medium p-3 w-48 h-20 rounded-lg bg-[#07DBAC] ${this.applyStyle(answer)}`}
                         type="button"
                         id={ answer.answer }
                         key={ index }
@@ -226,7 +232,7 @@ class Game extends Component {
                     data-testid="btn-next"
                     onClick={ this.nextQuestion }
                   >
-                    Next
+                    Next Question
                   </button>
                 )
                 }

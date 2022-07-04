@@ -9,7 +9,7 @@ import Config from './pages/Config';
 
 export default function App() {
   return (
-    <div className="bg-purple-800 h-screen">
+    <div className="bg-violet-800 min-h-screen">
       <Switch>
         <Route exact path="/" component={ Login } />
         <Route exact path="/game" component={ Game } />

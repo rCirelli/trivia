@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 class Timer extends Component {
   state = {
-    counter: 30,
+    counter: 0,
     timerId: 0,
   };
 
@@ -47,15 +47,22 @@ class Timer extends Component {
     }
   }
 
+  checkTimer = () => {
+    const { timerId } = this.state;
+    const { isPaused } = this.props;
+    console.log('timer', timerId);
+    return timerId === '' || isPaused ? '' : 'animate-ping';
+  }
+
   render() {
     const { counter } = this.state;
     return (
       <div
-        className="rounded-full border border-purple-500 h-[50px] w-[50px]
+        className="rounded-full border border-violet-500 h-[50px] w-[50px]
         flex justify-center items-center p-5"
       >
         <p
-          className="text-lg font-bold text-purple-200 animate-ping"
+          className={ `text-xl font-bold text-violet-200 ${this.checkTimer()}` }
           data-testid="timer-header"
         >
           { counter }

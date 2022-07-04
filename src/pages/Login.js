@@ -48,7 +48,7 @@ class Login extends Component {
   render() {
     const { name, email, isDisabled } = this.state;
     return (
-      <div className="flex flex-col justify-evenly items-center h-full">
+      <div className="flex flex-col justify-center items-center h-screen gap-16">
         <img className="App-logo max-w-md" src={ logo } alt="trivia" />
         <div
           className="flex flex-col justify-center items-center gap-7 bg-[#07DBAC]
@@ -73,8 +73,8 @@ class Login extends Component {
             dataTestid="input-gravatar-email"
           />
           <button
-            className="p-2 w-full rounded-lg bg-purple-700 text-purple-200 font-bold
-            hover:bg-purple-600"
+            className="p-2 w-full rounded-lg bg-violet-700 text-violet-200 font-bold
+            hover:bg-violet-600"
             data-testid="btn-play"
             type="button"
             disabled={ isDisabled }
@@ -83,8 +83,8 @@ class Login extends Component {
             Play
           </button>
           <button
-            className="p-2 w-full rounded-lg bg-purple-700 text-purple-200 font-bold
-            hover:bg-purple-600"
+            className="p-2 w-full rounded-lg bg-violet-700 text-violet-200 font-bold
+            hover:bg-violet-600"
             data-testid="btn-settings"
             type="button"
             onClick={ this.config }

@@ -19,7 +19,7 @@ class Header extends Component {
 
     return (
       <header
-        className="flex pr-5 justify-between items-center bg-[#3B254F]"
+        className="flex pr-10 justify-between items-center bg-[#3B254F]"
       >
         <div
           className="flex items-center"
@@ -33,7 +33,7 @@ class Header extends Component {
           <span data-testid="header-player-name">{ player.name }</span>
         </div>
         <div
-          className="text-purple-100"
+          className="text-violet-100"
         >
           <span>Score: </span>
           <span
