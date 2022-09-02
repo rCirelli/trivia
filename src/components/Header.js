@@ -22,7 +22,7 @@ class Header extends Component {
         className="flex pr-10 justify-between items-center bg-[#3B254F]"
       >
         <div
-          className="flex items-center"
+          className="flex items-center gap-5"
         >
           <img
             src={ `https://www.gravatar.com/avatar/${this.hashEmail(player.gravatarEmail)}` }
@@ -30,10 +30,15 @@ class Header extends Component {
             alt="profile"
             data-testid="header-profile-picture"
           />
-          <span data-testid="header-player-name">{ player.name }</span>
+          <span
+            className="text-violet-100 text-lg"
+            data-testid="header-player-name"
+          >
+            { player.name }
+          </span>
         </div>
         <div
-          className="text-violet-100"
+          className="text-violet-100 text-lg font-light antialiased"
         >
           <span>Score: </span>
           <span
